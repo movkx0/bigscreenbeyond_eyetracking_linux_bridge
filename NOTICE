@@ -1,0 +1,10 @@
+Bigscreen Beyond eye-tracking bridge for Linux
+
+This standalone distribution was extracted from tools/beyond-gaze in the
+Baballonia workspace. The native bridge source is unchanged. README.md was
+adapted for standalone setup, and CMakeLists.txt was updated to include this
+notice and the project license in the installed driver distribution.
+
+The Babble Software Distribution License 1.0 and its copyright notice are
+retained in LICENSE. OpenVR SDK headers and the upstream driver reference
+retain their respective license and provenance files under vendor/.

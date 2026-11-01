@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/ValveSoftware/openvr",
+  "commit": "0924064316de3effbcd1acf1e309182a2deb1c05",
+  "files": [
+    "headers/openvr_driver.h",
+    "headers/openvr.h",
+    "LICENSE"
+  ]
+}

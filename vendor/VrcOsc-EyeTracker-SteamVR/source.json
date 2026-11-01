@@ -1,0 +1,5 @@
+{
+  "repository": "https://github.com/Project-Babble/VrcOsc-EyeTracker-SteamVR",
+  "commit": "771788dab3d5f00cce7d6da951f2d4ccac4bc2f5",
+  "use": "OSC angle convention and SteamVR eye-component API reference; native implementation does not use upstream Windows hooks."
+}

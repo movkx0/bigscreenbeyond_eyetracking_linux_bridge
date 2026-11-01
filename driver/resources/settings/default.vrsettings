@@ -1,0 +1,8 @@
+{
+  "driver_beyond_gaze": {
+    "loadPriority": 1000,
+    "port": 9020,
+    "timeout_ms": 250,
+    "serial": ""
+  }
+}

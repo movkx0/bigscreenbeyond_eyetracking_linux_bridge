@@ -1,0 +1,45 @@
+cmake_minimum_required(VERSION 3.18)
+project(beyond_gaze LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+add_compile_options(-Wall -Wextra -Wpedantic -Werror)
+
+add_library(gaze STATIC src/gaze.cpp)
+target_include_directories(gaze PUBLIC src)
+set_target_properties(gaze PROPERTIES CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN YES)
+
+add_library(driver_beyond_gaze SHARED src/driver.cpp)
+target_include_directories(driver_beyond_gaze SYSTEM PRIVATE vendor/openvr)
+target_link_libraries(driver_beyond_gaze PRIVATE gaze)
+set_target_properties(driver_beyond_gaze PROPERTIES PREFIX ""
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/driver/bin/linux64"
+    CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN YES)
+configure_file(driver/driver.vrdrivermanifest driver/driver.vrdrivermanifest COPYONLY)
+configure_file(driver/resources/settings/default.vrsettings driver/resources/settings/default.vrsettings COPYONLY)
+# Standalone distribution: include the project license and extraction notice.
+configure_file(LICENSE driver/licenses/Babble-Software-Distribution-LICENSE COPYONLY)
+configure_file(NOTICE driver/licenses/NOTICE COPYONLY)
+configure_file(vendor/openvr/LICENSE driver/licenses/OpenVR-LICENSE COPYONLY)
+configure_file(vendor/openvr/source.json driver/licenses/OpenVR-source.json COPYONLY)
+configure_file(vendor/VrcOsc-EyeTracker-SteamVR/LICENSE driver/licenses/VrcOsc-EyeTracker-SteamVR-LICENSE COPYONLY)
+
+enable_testing()
+add_executable(gaze_tests tests/gaze_tests.cpp)
+target_link_libraries(gaze_tests PRIVATE gaze)
+add_test(NAME gaze_tests COMMAND gaze_tests)
+
+if(DEFINED STEAMVR_PATH)
+    add_executable(gaze_probe src/probe.cpp)
+    target_include_directories(gaze_probe SYSTEM PRIVATE vendor/openvr)
+    target_link_libraries(gaze_probe PRIVATE "${STEAMVR_PATH}/bin/linux64/libopenvr_api.so")
+endif()
+
+find_package(PkgConfig QUIET)
+if(PkgConfig_FOUND)
+    pkg_check_modules(OPENXR QUIET IMPORTED_TARGET openxr)
+    if(OPENXR_FOUND)
+        add_executable(gaze_xr_probe src/xr_probe.cpp)
+        target_link_libraries(gaze_xr_probe PRIVATE PkgConfig::OPENXR)
+    endif()
+endif()
